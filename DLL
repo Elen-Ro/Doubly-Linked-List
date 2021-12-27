@@ -1,0 +1,103 @@
+public class DLL<E extends Comparable<E>> {
+    private Node head, tail;
+    int size = 0;
+
+    public DLL() {
+        // if we used a header/trailer
+        // it would simplify the add algorithm, but would "waste" 2 nodes all the time
+        // https://stackoverflow.com/questions/50669861/what-is-the-benefit-to-having-a-header-node-and-a-trailer-node-in-a-linked-list
+
+        head = new Node(null, null, null);
+        tail = new Node(null, null, head);
+        head.next = tail;
+    }
+
+    private void addBetween(Node before, Node after, E item) {
+        Node node = new Node(item, null, null);
+        // The new node will point to the before and after nodes
+        node.prev = before;
+        node.next = after;
+        // The before and after nodes will point to the new one
+        before.next = node;
+        after.prev = node;
+        // Increment number of nodes
+        size++;
+    }
+
+    public void addFront(E item) {
+        // Add the new item between head and head.next
+        addBetween(head, head.next, item);
+        // Increment number of nodes
+        size++;
+    }
+
+    public void addBack(E item) {
+        // Add the new item between tail and tail.prev
+        addBetween(tail.prev, tail, item);
+        // Increment number of nodes
+        size++;
+    }
+
+
+    @Override
+    public String toString() {
+        StringBuilder output = new StringBuilder();
+        Node itr = head.next;
+        while(itr != tail) {
+            output.append(itr.data + " ");
+            itr = itr.next;
+        }
+        return output.toString();
+    }
+
+    public E removeFront(){
+        // Remove the first item if there is an item to remove.
+        if(size > 0){
+            Node node = head.next;
+            head.next = head.next.next;
+            head.next.prev = head;
+            // Decrement size
+            size--;
+            // Return the content of the deleted node
+            return node.data;
+        }
+        // If list is empty, return null
+        return null;
+    }
+
+    public E removeBack(){
+        // Remove the first item if there is an item to remove.
+        if(size > 0){
+            Node node = tail.prev;
+            tail.prev = tail.prev.prev;
+            tail.prev.next = tail;
+            // Return the content of the deleted node
+            return node.data;
+        }
+        // If list is empty, return null
+        return null;
+    }
+
+    public boolean contains(E it) {
+        // Iterate through the node
+        Node currNode = head.next;
+        while(currNode  != tail){
+            // If (the node.compareTo(it) == 0) this is essentially same as node == it by using compareTo
+            if(currNode.data.compareTo(it) == 0) return true;
+            currNode = currNode.next;
+        }
+        return false;
+    }
+
+    private class Node {
+        E data;
+        Node next;
+        Node prev;
+
+        public Node(E data, Node next, Node prev) {
+            this.data = data;
+            this.next = next;
+            this.prev = prev;
+        }
+    }
+}
