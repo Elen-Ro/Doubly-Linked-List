@@ -1,0 +1,103 @@
+public class DLLQueue<E extends Comparable<E>> implements Queue<E> {
+    // ATTRIBUTES
+    //First node in the list
+    private Node head;
+    // Last node in the list
+    private Node tail;
+    // Size of the list
+    private int size = 0;
+
+    // METHODS
+    // The enqueue method is equivalent to the addBack method of a Double Linked List.
+    @Override
+    public void enqueue(E it) {
+        // Insert the item if it doesn't exist in queue yet
+        if(!contains(it)) {
+            // Create a node for the item
+            Node node = new Node(it, null, tail);
+            // If the queue contains elements, this node goes after the tail
+            if (tail != null) {
+                tail.next = node;
+            // If the queue is empty, this node becomes the head
+            } else {
+                head = node;
+            }
+            // Now this is the last node or tail
+            tail = node;
+            // increment the size
+            size++;
+        }
+    }
+
+    // The enqueue method is equivalent to the removeFront method of a Double Linked List
+    @Override
+    public E dequeue() {
+        // Remove the first item if there is an item to remove
+        if(size > 0){
+            Node node = head;
+            head = head.next;
+            node.prev = null;
+            node.next = null;
+            // Decrement size
+            size--;
+            // Make tail null if size is 0
+            if(size == 0){
+                tail = null;
+            }
+            // Return the content of the deleted node
+            return node.data;
+        }
+        // if queue is empty, return null
+        return null;
+    }
+
+    @Override
+    public E frontValue() {
+        return head.data;
+    }
+
+    @Override
+    public int length() {
+        return size;
+    }
+
+    @Override
+    public boolean contains(E it) {
+        // Iterate through the node
+        Node currNode = head;
+        while(currNode  != null){
+            // if (the node.compareTo(it) == 0) this is essentially same as node == it by using compareTo
+            if(currNode.data.compareTo(it) == 0) return true;
+            currNode = currNode.next;
+        }
+        return false;
+    }
+
+    // Definition of the internal class: Node
+    private class Node {
+        // Attributes
+        E data;
+        Node next;
+        Node prev;
+        // Methods
+        // Constructor method
+        public Node(E data, Node next, Node prev) {
+            this.data = data;
+            this.next = next;
+            this.prev = prev;
+        }
+    }
+
+    @Override
+    public String toString() {
+        // In case the queue is empty
+        if(size <= 0) return "Empty Queue.";
+        // if queue is not empty
+        StringBuilder output = new StringBuilder();
+        Node itr = head;
+        while(itr != null) {
+            output.append(itr.data + "\n");
+            itr = itr.next;
+        }
+        return output.toString();
+    }
