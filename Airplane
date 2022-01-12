@@ -1,0 +1,39 @@
+public class Airplane implements Comparable<Airplane>{
+    private int flightNum;
+    private String airlineName;
+
+    public Airplane(int flightNum, String airlineName) {
+        this.flightNum = flightNum;
+        this.airlineName = airlineName;
+    }
+
+    public int getFlightNum() {
+        return flightNum;
+    }
+
+    public void setFlightNum(int flightNum) {
+        this.flightNum = flightNum;
+    }
+
+    public String getAirlineName() {
+        return airlineName;
+    }
+
+    public void setAirlineName(String airlineName) {
+        this.airlineName = airlineName;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Flight number #" + flightNum +
+                " with " + airlineName;
+    }
+
+    @Override
+    public int compareTo(Airplane other) {
+        if(Integer.compare(flightNum, other.flightNum) != 0)
+            return Integer.compare(flightNum, other.flightNum);
+        return airlineName.compareTo(other.airlineName);
+    }
+}
